@@ -106,3 +106,21 @@ function game() {
         console.log("It's a draw this time.");
     }
 }
+
+/*  Asks the user to specify if he wants to play again or not.
+ *  If yes ("y"), then the f-n initiates another game, followed by a self-call.
+ *  Otherwise ("n") the f-n finishes.
+ */
+function promptToPlayAgain() {
+    let userInput;
+    while (userInput !== "y" && userInput !== "n") {
+        userInput = prompt("Would you like to play again? (y/n) ");
+    }
+    if (userInput === "y") {
+        game();
+        promptToPlayAgain();
+    }
+}
+
+game(); // Commence with a game.
+promptToPlayAgain();
