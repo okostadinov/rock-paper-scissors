@@ -97,32 +97,36 @@ function checkScore() {
 
 const container = document.querySelector('#container');
 
+const parChooseWeaponText = document.createElement('p');
+parChooseWeaponText.setAttribute('id', 'chooseWeaponText');
+parChooseWeaponText.textContent = 'What shall be your weapon of choice?';
+container.appendChild(parChooseWeaponText);
+
+const divBtnsContainer = document.createElement('div');
+divBtnsContainer.setAttribute('id', 'btnsContainer');
+
 const btnRock = document.createElement('button');
 const btnPaper = document.createElement('button');
 const btnSciss = document.createElement('button');
 
 btnRock.classList.add('btn');
 btnRock.setAttribute('id', 'btnRock');
-btnRock.textContent = 'Rock';
 
 btnPaper.classList.add('btn');
 btnPaper.setAttribute('id', 'btnPaper');
-btnPaper.textContent = 'Paper';
 
 btnSciss.classList.add('btn');
 btnSciss.setAttribute('id', 'btnSciss');
-btnSciss.textContent = 'Scissors';
 
-container.appendChild(btnRock);
-container.appendChild(btnPaper);
-container.appendChild(btnSciss);
+divBtnsContainer.appendChild(btnRock);
+divBtnsContainer.appendChild(btnPaper);
+divBtnsContainer.appendChild(btnSciss);
+
+container.appendChild(divBtnsContainer);
 
 // Save the buttons into an array and add a click event to each calling playRound()
 const btns = Array.from(document.querySelectorAll('.btn'));
 btns.forEach(btn => btn.addEventListener('click', playRound));
-
-const divRoundResult = document.createElement('div');
-container.appendChild(divRoundResult);
 
 const divPlayerScore = document.createElement('div');
 const divComputerScore = document.createElement('div');
@@ -130,3 +134,7 @@ divPlayerScore.textContent = '0';
 divComputerScore.textContent = '0';
 container.appendChild(divPlayerScore);
 container.appendChild(divComputerScore);
+
+const divRoundResult = document.createElement('div');
+container.appendChild(divRoundResult);
+

@@ -1,0 +1,47 @@
+html {
+    background-color: #333333;
+    color: #eeeeee;
+    font-family: 'Style Script', cursive;
+}
+
+#container {
+    display: flex;
+    flex-direction: column;
+}
+
+#chooseWeaponText {
+    font-size: 30px;
+    text-align: center;
+}
+
+#btnsContainer {
+    display: flex;
+    justify-content: space-evenly;
+    align-content: center;
+    margin: 20px 0;
+}
+
+.btn {
+    background-size: 100px 130px;
+    height: 134px;  
+    width: 104px;
+}
+
+.btn:hover {
+    scale: 1.05;
+    border-color: #cceedd;
+    box-shadow: 1px 1px 1px 1px #ddffee;
+    cursor: pointer;
+}
+
+#btnRock {
+    background-image: url(../images/rock.png);
+}
+
+#btnPaper {
+    background-image: url(../images/paper.jpg);
+}
+
+#btnSciss {
+    background-image: url(../images/scissors.jpg);
+}
