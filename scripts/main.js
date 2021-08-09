@@ -12,115 +12,121 @@ function computerSelectChoice() {
     return "Scissors";
 }
 
-/*  Prompts user for input.
- *  Normalizes the input to first letter uppercase,
- *  and the rest of the string to lowercase.
- *  In case the input is not "Rock", "Paper" or "Scissors",
- *  call again until user provides correct input.
- *  Once done, return the player's choice.
+/*  Takes the click event as a paremeter in order to extract its target.
+ *  Based on it, returns the choice which the player has made.
  */
-function playerSelectChoice() {
-    let initPlayerChoice;
-    while (!initPlayerChoice) {
-        initPlayerChoice = prompt("Your choice: ");
+function playerSelectChoice(e) {
+    if (e.target.id === 'btnRock') {
+        return 'Rock';
+    } else if (e.target.id === 'btnPaper') {
+        return 'Paper';
     }
-    let playerChoice = initPlayerChoice.charAt(0).toUpperCase() + 
-        initPlayerChoice.slice(1).toLowerCase();
-    if (playerChoice === "Rock" || 
-        playerChoice === "Paper" || 
-        playerChoice === "Scissors") {
-            return playerChoice;
-    }
-    return playerSelectChoice();
+    return 'Scissors';
 }
 
-/*  Calls for computation of both the computer
- *  and the player's choices, followed by comparing
- *  the result and returning one of three values:
- *      1 - in case the player won the round;
- *      2 - in case the player lost the round;
- *      0 - in case it was a draw;
+/*  Extracts the player's choice and computer that of the AI.
+ *  Calculates the result and adds it to the current score.
+ *  Checks if either the player or the AI has reached 5 points.
  */
-function playRound() {
-    let playerChoice = playerSelectChoice();
+function playRound(e) {
+    let playerChoice = playerSelectChoice(e);
     let computerChoice = computerSelectChoice();
+    let playerScore = divPlayerScore.textContent;
+    let computerScore = divComputerScore.textContent;
 
     if (playerChoice === "Rock") {
         if (computerChoice === "Rock") {
-            console.log("This round is draw.");
-            return 0;
+            divRoundResult.textContent = 'This round is a draw.';
         } else if (computerChoice === "Paper") {
-            console.log("You lose! Paper beats Rock.");
-            return 2;
+            divRoundResult.textContent = 'You lose! Paper beats Rock.';
+            computerScore++;
         } else {
-            console.log("You win! Rock beats Scissors.");
-            return 1;
+            divRoundResult.textContent = 'You win! Rock beats Scissors.';
+            playerScore++;
         }
     } else if (playerChoice === "Paper") {
         if (computerChoice === "Rock") {
-            console.log("You win! Paper beats rock.");
-            return 1;
+            divRoundResult.textContent = 'You win! Paper beats Rock.';
+            playerScore++;
         } else if (computerChoice === "Paper") {
-            console.log("This round is a draw.");
-            return 0;
+            divRoundResult.textContent = 'This round is a draw.';
         } else {
-            console.log("You lose! Scissors beat Paper.");
-            return 2;
+            divRoundResult.textContent = 'You lose! Scissors beat Paper.';
+            computerScore++;
         }
     } else {
         if (computerChoice === "Rock") {
-            console.log("You lose! Rock beats Scissors.");
-            return 2;
-        } else if (computerChoice === "Paper") {
-            console.log("You win! Scissors beat Paper.");
-            return 1;
-        } else {
-            console.log("This round is a draw.");
-            return 0;
-        }
-    }
-}
-
-/*  Plays five round of rock-paper-scissors
- *  by calling the playRound() f-n in a loop.
- *  Each time the return value is considered
- *  in order to keep track of the score.
- *  At the end, prints whether the player won or lost,
- *  or if the game was a draw.
- */
-function game() {
-    let playerScore = computerScore = roundResult = 0;
-    for (i = 0; i < 5; i++) {
-        roundResult = playRound();
-        if (roundResult === 1) {
-            playerScore++;
-        } else if (roundResult === 2) {
+            divRoundResult.textContent = 'You lose! Rock beats Scissors.';
             computerScore++;
+        } else if (computerChoice === "Paper") {
+            divRoundResult.textContent = 'You win! Scissors beat Paper.';
+            playerScore++;
+        } else {
+            divRoundResult.textContent = 'This round is draw.';
         }
     }
-    if (playerScore > computerScore) {
-        console.log("You win the game!");
-    } else if (playerScore < computerScore) {
-        console.log("You lose the game.");
-    } else {
-        console.log("It's a draw this time.");
-    }
+    // Update the divs storing the scores.
+    divPlayerScore.textContent = playerScore;
+    divComputerScore.textContent = computerScore;
+    checkScore();
 }
 
-/*  Asks the user to specify if he wants to play again or not.
- *  If yes ("y"), then the f-n initiates another game, followed by a self-call.
- *  Otherwise ("n") the f-n finishes.
- */
-function promptToPlayAgain() {
-    let userInput;
-    while (userInput !== "y" && userInput !== "n") {
-        userInput = prompt("Would you like to play again? (y/n) ");
+/*  Checks if either the player or the computer has reached 5 points.
+ *  If yes, alert the player of the end result and nullifies the score.
+ *  Otherwise continues as is.
+ */ 
+function checkScore() {
+    let playerScore = divPlayerScore.textContent;
+    let computerScore = divComputerScore.textContent;
+
+    if (playerScore >= 5) {
+        alert('Congratulations! You have beaten the infamous AI!');
+        playerScore = computerScore = 0;
+        divPlayerScore.textContent = playerScore;
+        divComputerScore.textContent = computerScore;
     }
-    if (userInput === "y") {
-        game();
-        promptToPlayAgain();
+
+    if (computerScore >= 5) {
+        alert('Oh no! The AI have beaten you, all hope is lost...');
+        playerScore = computerScore = 0;
+        divPlayerScore.textContent = playerScore;
+        divComputerScore.textContent = computerScore;
     }
+    return;
 }
 
-game(); // Commence with a game.
-promptToPlayAgain();
+const container = document.querySelector('#container');
+
+const btnRock = document.createElement('button');
+const btnPaper = document.createElement('button');
+const btnSciss = document.createElement('button');
+
+btnRock.classList.add('btn');
+btnRock.setAttribute('id', 'btnRock');
+btnRock.textContent = 'Rock';
+
+btnPaper.classList.add('btn');
+btnPaper.setAttribute('id', 'btnPaper');
+btnPaper.textContent = 'Paper';
+
+btnSciss.classList.add('btn');
+btnSciss.setAttribute('id', 'btnSciss');
+btnSciss.textContent = 'Scissors';
+
+container.appendChild(btnRock);
+container.appendChild(btnPaper);
+container.appendChild(btnSciss);
+
+// Save the buttons into an array and add a click event to each calling playRound()
+const btns = Array.from(document.querySelectorAll('.btn'));
+btns.forEach(btn => btn.addEventListener('click', playRound));
+
+const divRoundResult = document.createElement('div');
+container.appendChild(divRoundResult);
+
+const divPlayerScore = document.createElement('div');
+const divComputerScore = document.createElement('div');
+divPlayerScore.textContent = '0';
+divComputerScore.textContent = '0';
+container.appendChild(divPlayerScore);
+container.appendChild(divComputerScore);
