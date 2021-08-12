@@ -80,28 +80,53 @@ function checkScore() {
     let computerScore = divComputerScore.textContent;
 
     if (playerScore >= 5) {
-        alert('Congratulations! You have beaten the infamous AI!');
-        playerScore = computerScore = 0;
-        divPlayerScore.textContent = playerScore;
-        divComputerScore.textContent = computerScore;
+        parVictoryOrDefeat.textContent = 'Congratulations! You have beaten the infamous AI!';
+        openModal();
     }
 
     if (computerScore >= 5) {
-        alert('Oh no! The AI have beaten you, all hope is lost...');
-        playerScore = computerScore = 0;
-        divPlayerScore.textContent = playerScore;
-        divComputerScore.textContent = computerScore;
+        parVictoryOrDefeat.textContent = 'The Gods have turned their backs on you. All hope is lost...';
+        openModal();
     }
     return;
 }
 
+/*  Creates and opens an window notifying the user whether
+ *  he won or lost. A button allowing for restarting the game
+ *  has been added, such that the score is reset.
+ */
+function openModal() {
+    const modalWindow = document.createElement('div');
+    modalWindow.classList.add('modal-window');
+    const modalContent = document.createElement('div');
+    modalContent.classList.add('modal-content');
+
+    btnReset.textContent = 'Continue fighting!';
+    btnReset.classList.add('centered');
+    btnReset.addEventListener('click', () => {
+        playerScore = computerScore = 0;
+        divPlayerScore.textContent = playerScore;
+        divComputerScore.textContent = computerScore;
+        modalWindow.setAttribute('style', 'display: none');
+        divRoundResult.textContent = '';
+    });
+
+    modalContent.appendChild(parVictoryOrDefeat);
+    modalContent.appendChild(btnReset);
+    modalWindow.appendChild(modalContent);
+    container.appendChild(modalWindow);
+}
+
+// Main container
 const container = document.querySelector('#container');
 
+// Static paragraph at top
 const parChooseWeaponText = document.createElement('p');
 parChooseWeaponText.setAttribute('id', 'chooseWeaponText');
 parChooseWeaponText.textContent = 'What shall be your weapon of choice?';
 container.appendChild(parChooseWeaponText);
 
+// Div grouping the three choices
 const divBtnsContainer = document.createElement('div');
 divBtnsContainer.setAttribute('id', 'btnsContainer');
 
@@ -111,30 +136,48 @@ const btnSciss = document.createElement('button');
 
 btnRock.classList.add('btn');
 btnRock.setAttribute('id', 'btnRock');
-
 btnPaper.classList.add('btn');
 btnPaper.setAttribute('id', 'btnPaper');
-
 btnSciss.classList.add('btn');
 btnSciss.setAttribute('id', 'btnSciss');
 
 divBtnsContainer.appendChild(btnRock);
 divBtnsContainer.appendChild(btnPaper);
 divBtnsContainer.appendChild(btnSciss);
-
 container.appendChild(divBtnsContainer);
 
 // Save the buttons into an array and add a click event to each calling playRound()
 const btns = Array.from(document.querySelectorAll('.btn'));
 btns.forEach(btn => btn.addEventListener('click', playRound));
 
+// Div grouping the scores throughout the round
+const divScoreboard = document.createElement('div');
+divScoreboard.setAttribute('id', 'scoreboard');
+
 const divPlayerScore = document.createElement('div');
 const divComputerScore = document.createElement('div');
+const parPlayer = document.createElement('p');
+const parComputer = document.createElement('p');
+parPlayer.textContent = 'You: ';
+parComputer.textContent = 'AI: ';
 divPlayerScore.textContent = '0';
 divComputerScore.textContent = '0';
-container.appendChild(divPlayerScore);
-container.appendChild(divComputerScore);
+divScoreboard.appendChild(parPlayer);
+divScoreboard.appendChild(divPlayerScore);
+divScoreboard.appendChild(parComputer);
+divScoreboard.appendChild(divComputerScore);
+container.appendChild(divScoreboard);
 
+// Div displaying the result of each round
 const divRoundResult = document.createElement('div');
+divRoundResult.classList.add('centered');
 container.appendChild(divRoundResult);
 
+// Contains the end result of the game and is added to the popup modal
+const parVictoryOrDefeat = document.createElement('p');
+parVictoryOrDefeat.classList.add('centered');
+
+// Added to the popup modal after the BO5, allowing to restart the game
+const btnReset = document.createElement('button');
+btnReset.classList.add('centered');
+btnReset.setAttribute('id', 'btnReset');
